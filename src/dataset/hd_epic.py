@@ -84,7 +84,7 @@ class HDepicDataset(Dataset):
                 timestamp_start_datetime = datetime.strptime(timestamp_start_text, "%H%M%S").time() #transform timestamp text to datetime
                 clip_number = int(re.search(r"_[0-9]+")).rstrip("_") #get number in the sequence of the video's chunks
                 timestamp_start = timestamp_start_datetime + timedelta(seconds=chunk_duration_s * clip_number) 
-                timestamp_end = timestamp_start + timedelta(seconds=chunk_duration_s)
+                timestamp_end = timestamp_start + timedelta(seconds=int(duration(path)))
 
                 #data row of the clip
                 clip = Clip(
@@ -93,7 +93,7 @@ class HDepicDataset(Dataset):
                     day = re.search(r"-[0-9]+-", path),
                     timestamp_start = timestamp_start,
                     timestamp_end = timestamp_end
-                ) 
+                )
 
                 self.clips.append(clip)
 
