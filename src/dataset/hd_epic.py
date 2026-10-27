@@ -60,7 +60,7 @@ class Clip(BaseModel):
     timestamp_end = str
 
 class HDepicDataset(Dataset):
-    def __init__(self, dataset_path: str, output_path: str = 'output/hd_epic/', chunk_duration_s: int = 30):
+    def __init__(self, dataset_path: str, output_path: str = f'output/hd_epic/', chunk_duration_s: int = 30):
         self.dataset_path = Path(dataset_path)
         self.video_path = Path(dataset_path + "/Videos") 
         self.participants =  [p for p in self.video_path.rglob(f"**/P0*")] #list all availiable participants
