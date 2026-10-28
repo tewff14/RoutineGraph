@@ -112,5 +112,9 @@ def get_graph():
 
     checkpointer = InMemorySaver()
     graph = workflow.compile(checkpointer=checkpointer)
-    config: RunnableConfig = {"configurable": {"thread_id": 1}} # use 1 as a thread ID because we wil have only one thread anyway
-    return graph, config #don't forget to call graph with the config
+    # config: RunnableConfig = {"configurable": {"thread_id": 1}} # use 1 as a thread ID because we wil have only one thread anyway
+    return graph #don't forget to call graph with the config
+
+def get_config(config_unique: str):
+    config: RunnableConfig  = {"configurable": {"thread_id": config_unique}}
+    return config

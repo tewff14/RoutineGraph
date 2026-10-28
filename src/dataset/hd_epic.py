@@ -50,11 +50,16 @@ def split_video(video_path: str, output_path: str, output_pattern: str, chunk_du
     #read all video as one stream and split into n-second clips
     command = ["ffmpeg",  
                "-n", #skip if file exists
+               "-vf", "fps=2", "scale=448:448",
+               "-c:v", "h264_videotoolbox", "-b:v", "300k",
+               "-force_key_frames", "expr:gte(t,n_forced*30)"
+               "-c:a", "aac", "-ac" ,"1", "-b:a", "32k"
                "-i", video_path, 
                "-map", "0", 
                "-c", "copy",
                "-f", "segment",
                "-segment_time", str(chunk_duration_s),
+               "-reset_timestamps", "1",
                f"{output_path}/{output_pattern}"]
 
     subprocess.run(command, check=True)
