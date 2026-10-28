@@ -72,16 +72,16 @@ def event_extraction(state: CarryOnState):
     clip = state["video"] #extract Clip obj from state (input from dataset)
 
     video_input_context = f"""current chunk video:
-    subject: {clip["name"]}
-    day: {clip["day"]}
-    timestamp_start: {clip["timestamp_start"]}
-    timestamp_end: {clip["timestamp_end"]}
+    subject: {clip.name}
+    day: {clip.day}
+    timestamp_start: {clip.timestamp_start}
+    timestamp_end: {clip.timestamp_end}
     """
 
     #preprocess video to base64 for LLM to process
-    video_path = Path(clip["clip_path"])
+    video_path = Path(clip.clip_path)
     video_bytes = video_path.read_bytes()
-    video_base64 = base64.b64encode(video_bytes)
+    video_base64 = base64.b64encode(video_bytes).decode("utf-8")
 
     #construct message systempompt + context + video
     system_message = SystemMessage(SYSTEM_PROMPT)
@@ -101,8 +101,8 @@ def event_extraction(state: CarryOnState):
     # state["ended_activities"].extend(response["add_ended_activities"])
 
     return {"on_going_activities": response.on_going_activities,
-            "ended_activities": state["ended_activities"].extend(response.add_ended_activities),
-            "ll_calls": state["llm_calls"] +1}
+            "ended_activities": state["ended_activities"] + response.add_ended_activities,
+            "llm_calls": state["llm_calls"] +1}
 
 def get_graph():
     workflow = StateGraph(CarryOnState)

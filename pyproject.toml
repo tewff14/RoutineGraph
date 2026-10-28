@@ -8,6 +8,7 @@ dependencies = [
     "langchain>=1.4.7",
     "langchain-openrouter>=0.2.9",
     "langgraph>=1.2.16",
+    "numpy>=2.4.6",
     "pydantic>=2.14.1",
     "python-dotenv>=1.2.4",
     "torch>=2.14.1",
