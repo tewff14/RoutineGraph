@@ -1,11 +1,12 @@
 [project]
 name = "routine-graph"
 version = "0.1.0"
-description = "Add your description here"
+description = "Discover and query daily habits and routines from persistent video activities"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "faiss-cpu>=1.15.1",
+    "httpx>=0.28.1",
     "langchain>=1.4.7",
     "langchain-ollama>=1.1.0",
     "langchain-openrouter>=0.2.9",

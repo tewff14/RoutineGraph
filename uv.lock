@@ -2072,6 +2072,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "faiss-cpu" },
+    { name = "httpx" },
     { name = "langchain" },
     { name = "langchain-ollama" },
     { name = "langchain-openrouter" },
@@ -2089,6 +2090,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "faiss-cpu", specifier = ">=1.15.1" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "langchain", specifier = ">=1.4.7" },
     { name = "langchain-ollama", specifier = ">=1.1.0" },
     { name = "langchain-openrouter", specifier = ">=0.2.9" },

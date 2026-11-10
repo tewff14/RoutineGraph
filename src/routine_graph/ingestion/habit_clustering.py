@@ -1,5 +1,6 @@
 from sklearn.cluster import DBSCAN
 import numpy as np
+from routine_graph.models import normalized_vectors
 
 class HabitCluster:
     def __init__(self, vectors: list[np.ndarray], activity_ids: list[int], eps: float = 0.5, min_samples: int = 5, metric: str = "euclidean",
@@ -9,8 +10,17 @@ class HabitCluster:
         if len(vectors) != len(activity_ids):
             raise ValueError(f"Got {len(vectors)} vectors but {len(activity_ids)} activity ids")
 
-        self.vectors = np.stack(vectors) #(n_activities, embedding_dim)
+        if len(set(activity_ids)) != len(activity_ids):
+            raise ValueError("Activity IDs must be unique")
+        self.vectors = normalized_vectors(vectors) if vectors else np.empty((0, 0))
         self.activity_ids = list(activity_ids) #activity unit id of each vector (same order as vectors)
+
+        if not vectors:
+            self.dbscan = None
+            self.labels = np.array([], dtype=int)
+            self.core_sample_indices = np.array([], dtype=int)
+            self.id_to_cluster = {}
+            return
 
         #perform DBSCAN on the activity vectors
         self.dbscan = DBSCAN(eps=eps, min_samples=min_samples, metric=metric, metric_params=metric_params,
@@ -21,5 +31,5 @@ class HabitCluster:
         self.id_to_cluster = dict(zip(self.activity_ids, self.labels.tolist())) #activity unit id -> cluster id
 
     def get_id_to_cluster(self) -> dict[int, int]:
-        """Return the mapping of sequence id -> cluster id (-1 is noise)"""
+        """Return the mapping of activity id -> cluster id (-1 is noise)"""
         return self.id_to_cluster

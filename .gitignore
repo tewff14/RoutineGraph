@@ -14,3 +14,24 @@ wheels/
 
 #Agent doc
 HANDOFF.md
+GLOSSARY.md
+
+.DS_Store
+
+#Generated memory and vector indexes
+data/
+
+Routine graph.pdf
+
+Claude outputs
+
+paper
+
+examples
+
+docs
+
+tests
+
+
+

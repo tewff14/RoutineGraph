@@ -48,10 +48,7 @@ Go through every ongoing activity from the previous chunk, then look for new one
 - If nothing meaningful is happening and the ongoing list is empty, return two empty lists.
 """
 
-model = init_chat_model(
-    "google/gemini-3.6-flash",
-    model_provider="openrouter"
-)
+model = None
 
 #represent an event that is not end yet (no end timestamp)
 class OngoingActivity(TypedDict):
@@ -79,7 +76,15 @@ class CarryOnState(TypedDict):
     ended_activities: list[EndedActivity]
     llm_calls: int
 
-structured_llm = model.with_structured_output(ActivityOutput)
+structured_llm = None
+
+def get_structured_llm():
+    """Create the default provider only when the legacy extractor is invoked."""
+    global model, structured_llm
+    if structured_llm is None:
+        model = init_chat_model("google/gemini-3.6-flash", model_provider="openrouter")
+        structured_llm = model.with_structured_output(ActivityOutput)
+    return structured_llm
 
 def event_extraction(state: CarryOnState):
     ongoing_activities = state["on_going_activities"]
@@ -124,7 +129,7 @@ def event_extraction(state: CarryOnState):
          "base64": video_base64}
     ])
 
-    response: ActivityOutput = structured_llm.invoke([system_message, human_message])
+    response: ActivityOutput = get_structured_llm().invoke([system_message, human_message])
 
     # replace state's ongoing activities list with new list from the llm
     # state["on_going_activities"] = response["ongoing_activities"]
